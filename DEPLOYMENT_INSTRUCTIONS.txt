@@ -1,0 +1,38 @@
+DEPLOYMENT INSTRUCTIONS - FIX LOGIN ERROR
+============================================
+
+PROBLEM FIXED:
+✅ Removed all "us-west-1" references
+✅ Fixed double slash "//auth/login" issue
+✅ Updated to correct URL: "shopping-platform.us-east-2.elasticbeanstalk.com"
+
+FILES TO DEPLOY:
+
+1. BACKEND JAR FILE:
+   Location: d:\FinalProjectMain\FinalProject\target\FinalProject-0.0.1-SNAPSHOT.jar
+   Deploy to: Your Elastic Beanstalk backend environment
+
+2. FRONTEND FILES:
+   Location: d:\FinalProjectMain\ecommerce-angular\dist\ecommerce-angular\browser\
+   Deploy to: Your Elastic Beanstalk frontend environment
+   
+   Files include:
+   - index.html
+   - main-ASJZIQWG.js
+   - chunk-*.js files
+   - styles-BT4OVE4A.css
+   - assets/ folder
+   - etc.
+
+TEST CREDENTIALS:
+Email: test123@test.com
+Password: test123
+
+IMPORTANT:
+- Deploy BOTH frontend and backend
+- Clear browser cache after deployment
+- Use incognito mode to test
+
+VERIFICATION:
+The built JavaScript now contains: "http://shopping-platform.us-east-2.elasticbeanstalk.com/api"
+No more "us-west-1" or double slash errors!

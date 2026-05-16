@@ -31,3 +31,16 @@ build/
 
 ### VS Code ###
 .vscode/
+
+.idea/
+.vscode/
+*.log
+*.zip
+*.sql
+*.bat
+.project
+qodana.yaml
+COMPILATION_FIXES.md
+DEPLOYMENT_INSTRUCTIONS.txt
+debug-checklist.md
+system-debug-checklist.md
