@@ -1,0 +1,44 @@
+services:
+  - type: web
+    name: final-project-backend
+    runtime: java
+    plan: free
+    buildCommand: ./mvnw clean package -DskipTests
+    startCommand: java -jar target/FinalProject-0.0.1-SNAPSHOT.jar
+    envVars:
+      - key: MYSQLHOST
+        fromDatabase:
+          name: railway-mysql
+          property: host
+      - key: MYSQLPORT
+        fromDatabase:
+          name: railway-mysql
+          property: port
+      - key: MYSQLUSER
+        fromDatabase:
+          name: railway-mysql
+          property: username
+      - key: MYSQLPASSWORD
+        fromDatabase:
+          name: railway-mysql
+          property: password
+      - key: MYSQLDATABASE
+        fromDatabase:
+          name: railway-mysql
+          property: database
+      - key: MYSQL_URL
+        fromDatabase:
+          name: railway-mysql
+          property: connectionString
+      - key: RAZORPAY_KEY_ID
+        sync: false
+      - key: RAZORPAY_KEY_SECRET
+        sync: false
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: SPRING_PROFILES_ACTIVE
+        value: prod
+
+databases:
+  - name: railway-mysql
+    databaseName: ebdb
