@@ -3,10 +3,9 @@ services:
     name: final-project-backend
     runtime: docker
     plan: free
-    dockerContext: ./backend
-    dockerfilePath: ./backend/Dockerfile
+    dockerContext: backend
+    dockerfilePath: backend/Dockerfile
     envVars:
-      # Set these manually in Render dashboard from Railway MySQL → Variables tab
       - key: MYSQLHOST
         sync: false
       - key: MYSQLPORT
