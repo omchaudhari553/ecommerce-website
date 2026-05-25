@@ -1,0 +1,136 @@
+<section id="hero">
+    <h4>Trade-in-offer</h4>
+    <h2>Super value deals</h2>
+    <h1>On all products</h1>
+    <p>Save more with coupons & up to 70% off</p>
+    <button routerLink="/shop">Shop Now</button>
+</section>
+
+<section id="feature" class="section-p1">
+    <div class="fe-box">
+        <img src="assets/img/features/f1.png" alt="Free Shipping">
+        <h6><strong>Free Shipping</strong></h6>
+    </div>
+    <div class="fe-box">
+        <img src="assets/img/features/f2.png" alt="Online Order">
+        <h6><strong>Online Order</strong></h6>
+    </div>
+    <div class="fe-box">
+        <img src="assets/img/features/f3.png" alt="Save Money">
+        <h6><strong>Save Money</strong></h6>
+    </div>
+    <div class="fe-box">
+        <img src="assets/img/features/f4.png" alt="Promotions">
+        <h6><strong>Promotions</strong></h6>
+    </div>
+    <div class="fe-box">
+        <img src="assets/img/features/f5.png" alt="Happy Selling">
+        <h6><strong>Happy Selling</strong></h6>
+    </div>
+    <div class="fe-box">
+        <img src="assets/img/features/f6.png" alt="24/7 Support">
+        <h6><strong>24/7 Support</strong></h6>
+    </div>
+</section>
+
+<section id="product1" class="section-p1">
+    <h2>Featured Products</h2>
+    <p>Summer Collection New Modern Design</p>
+    <div class="pro-container">
+        <div class="pro" *ngFor="let product of featuredProducts">
+            <img [src]="'assets/img/products/' + product.image" [alt]="product.name">
+            <div class="des">
+                <span>{{product.brand}}</span>
+                <h5>{{product.name}}</h5>
+                <div class="star">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                </div>
+                <h4>{{formatCurrency(product.price)}}</h4>
+            </div>
+            <a (click)="addToCart(product)"><i class="fal fa-shopping-cart cart"></i></a>
+        </div>
+    </div>
+</section>
+
+<section id="banner" class="section-m1">
+    <h4>Repair Services</h4>
+    <h2>Up To <span>70% off</span> - All t-Shirts & Accessories</h2>
+    <button class="normal" routerLink="/shop">Explore More</button>
+</section>
+
+<section id="product1" class="section-p1">
+    <h2>New Arrivals</h2>
+    <p>Summer Collection New Modern Design</p>
+    <div class="pro-container">
+        <div class="pro" *ngFor="let product of newArrivals">
+            <img [src]="'assets/img/products/' + product.image" [alt]="product.name">
+            <div class="des">
+                <span>{{product.brand}}</span>
+                <h5>{{product.name}}</h5>
+                <div class="star">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                </div>
+                <h4>{{formatCurrency(product.price)}}</h4>
+            </div>
+            <a (click)="addToCart(product)"><i class="fal fa-shopping-cart cart"></i></a>
+        </div>
+    </div>
+</section>
+
+<section id="sm-banner" class="section-p1">
+    <div class="banner-box" style="background-image: url('assets/img/banner/b17.jpg');">
+        <h4><strong>SEASONAL SALE</strong></h4>
+        <h2><strong>Winter Collection -50% OFF</strong></h2>
+        <span>The best classic dress is on sale at cara</span>
+        <button class="white" routerLink="/shop">Learn More</button>
+    </div>
+    <div class="banner-box banner-box2" style="background-image: url('assets/img/banner/b10.jpg');">
+        <h4><strong>NEW FOOTWEAR COLLECTION</strong></h4>
+        <h2><strong>Spring / Summer 2022</strong></h2>
+        <span>The best classic dress is on sale at cara</span>
+        <button class="white" routerLink="/shop">Collection</button>
+    </div>
+</section>
+
+<section id="banner3">
+    <div class="banner-box" style="background-image: url('assets/img/banner/b7.jpg');">
+        <h2><strong>SEASONAL SALE</strong></h2>
+        <h3><strong>Winter Collection -50% OFF</strong></h3>
+    </div>
+    <div class="banner-box banner-box2" style="background-image: url('assets/img/banner/b4.jpg');">
+        <h2><strong>NEW FOOTWEAR COLLECTION</strong></h2>
+        <h3><strong>Spring / Summer 2022</strong></h3>
+    </div>
+    <div class="banner-box banner-box3" style="background-image: url('assets/img/banner/b18.jpg');">
+        <h2><strong>T-SHIRTS</strong></h2>
+        <h3><strong>New Trendy Prints</strong></h3>
+    </div>
+</section>
+
+<section id="newsletter" class="section-p1 section-m1">
+    <div class="newstext">
+        <h4><strong>Sign Up For Newsletter</strong></h4>
+        <p>Get E-mail updates about our latest shop and <span>special offers.</span></p>
+    </div>
+    <div class="form">
+        <input type="email" 
+               placeholder="Your email address" 
+               [(ngModel)]="emailSubscription"
+               [class.invalid]="showError && !isValidEmail(emailSubscription)"
+               (keyup.enter)="subscribeNewsletter()">
+        <button class="normal" (click)="subscribeNewsletter()">
+            <strong>Subscribe</strong>
+        </button>
+    </div>
+    <div class="error-message" *ngIf="showError && !isValidEmail(emailSubscription)">
+        Please enter a valid email address
+    </div>
+</section>

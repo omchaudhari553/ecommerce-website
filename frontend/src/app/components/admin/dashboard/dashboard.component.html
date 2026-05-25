@@ -1,0 +1,120 @@
+<div class="admin-dashboard">
+    <h1>Admin Dashboard</h1>
+
+    <!-- Statistics Cards -->
+    <div class="stats-cards">
+        <div class="stat-card">
+            <div class="stat-icon orders">
+                <i class="fas fa-shopping-bag"></i>
+            </div>
+            <div class="stat-details">
+                <h3>Total Orders</h3>
+                <p>{{stats.totalOrders}}</p>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon products">
+                <i class="fas fa-box"></i>
+            </div>
+            <div class="stat-details">
+                <h3>Total Products</h3>
+                <p>{{stats.totalProducts}}</p>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon users">
+                <i class="fas fa-users"></i>
+            </div>
+            <div class="stat-details">
+                <h3>Total Users</h3>
+                <p>{{stats.totalUsers}}</p>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon revenue">
+                <i class="fas fa-rupee-sign"></i>
+            </div>
+            <div class="stat-details">
+                <h3>Total Revenue</h3>
+                <p>₹{{stats.totalRevenue}}</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="quick-actions">
+        <h2>Quick Actions</h2>
+        <div class="action-buttons">
+            <a routerLink="/admin/manage-products/new" class="action-btn">
+                <i class="fas fa-plus"></i> Add New Product
+            </a>
+            <a routerLink="/admin/manage-orders" class="action-btn">
+                <i class="fas fa-list"></i> View All Orders
+            </a>
+            <a routerLink="/admin/users" class="action-btn">
+                <i class="fas fa-user"></i> Manage Users
+            </a>
+        </div>
+    </div>
+
+    <!-- Recent Orders -->
+    <div class="recent-orders">
+        <div class="section-header">
+            <h2>Recent Orders</h2>
+            <a routerLink="/admin/manage-orders" class="view-all">View All</a>
+        </div>
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Order ID</th>
+                        <th>Customer</th>
+                        <th>Amount</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let order of stats.recentOrders">
+                        <td>#{{order.id}}</td>
+                        <td>{{order.customer}}</td>
+                        <td>₹{{order.amount}}</td>
+                        <td>
+                            <span class="status" [class]="order.status.toLowerCase()">
+                                {{order.status}}
+                            </span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Top Products -->
+    <div class="top-products">
+        <div class="section-header">
+            <h2>Top Products</h2>
+            <a routerLink="/admin/manage-products" class="view-all">View All</a>
+        </div>
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Product ID</th>
+                        <th>Name</th>
+                        <th>Total Sales</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let product of stats.topProducts">
+                        <td>#{{product.id}}</td>
+                        <td>{{product.name}}</td>
+                        <td>{{product.sales}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div> 

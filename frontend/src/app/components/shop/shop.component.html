@@ -1,0 +1,61 @@
+<section id="page-header">
+    <h2>#stayhome</h2>
+    <p>Save more with coupons & up to 70% off</p>
+</section>
+
+<section id="product1" class="section-p1">
+    <h2>Featured Products</h2>
+    <p>Summer Collection New Modern Design</p>
+    <div class="pro-container">
+        <div class="pro" *ngFor="let product of getCurrentPageProducts()">
+            <img [src]="'assets/img/products/' + product.image" [alt]="product.name">
+            <div class="des" (click)="viewProductDetails(product.id)">
+                <span>{{ product.brand }}</span>
+                <h5>{{ product.name }}</h5>
+                <div class="star">
+                    <i class="fas fa-star" *ngFor="let star of [].constructor(product.rating || 0)"></i>
+                    <i class="far fa-star" *ngFor="let star of [].constructor(5 - (product.rating || 0))"></i>
+                </div>
+                <h4>{{ formatCurrency(product.price) }}</h4>
+            </div>
+            <a href="javascript:void(0)" (click)="addToCart(product)">
+                <i class="fal fa-shopping-cart cart"></i>
+            </a>
+        </div>
+    </div>
+</section>
+
+<section id="pagination" class="section-p1">
+    <a href="javascript:void(0)" (click)="changePage(currentPage - 1)" [class.disabled]="currentPage === 1">
+        <i class="fal fa-long-arrow-alt-left"></i>
+    </a>
+    <a href="javascript:void(0)" 
+       *ngFor="let page of getPages()" 
+       [class.active]="currentPage === page"
+       (click)="changePage(page)">
+        {{ page }}
+    </a>
+    <a href="javascript:void(0)" (click)="changePage(currentPage + 1)" [class.disabled]="currentPage === totalPages">
+        <i class="fal fa-long-arrow-alt-right"></i>
+    </a>
+</section>
+
+<section id="newsletter" class="section-p1 section-m1">
+    <div class="newstext">
+        <h4><strong>Sign Up For Newsletter</strong></h4>
+        <p>Get E-mail updates about our latest shop and <span>special offers.</span></p>
+    </div>
+    <div class="form">
+        <input type="email" 
+               placeholder="Your email address" 
+               [(ngModel)]="emailSubscription"
+               [class.invalid]="showError && !isValidEmail(emailSubscription)"
+               (keyup.enter)="subscribeNewsletter()">
+        <button class="normal" (click)="subscribeNewsletter()">
+            <strong>Subscribe</strong>
+        </button>
+    </div>
+    <div class="error-message" *ngIf="showError && !isValidEmail(emailSubscription)">
+        Please enter a valid email address
+    </div>
+</section>

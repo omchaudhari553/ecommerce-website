@@ -1,0 +1,86 @@
+<div class="orders-container">
+    <div class="orders-header">
+        <h1>My Orders</h1>
+        <div class="header-buttons">
+            <button (click)="clearOrders()" class="clear-orders-btn">
+                <i class="fas fa-trash"></i>
+                Clear All Orders
+            </button>
+        </div>
+    </div>
+
+    <!-- Loading State -->
+    <div class="loading-state" *ngIf="loading">
+        <div class="spinner"></div>
+        <p>Loading your orders...</p>
+    </div>
+
+    <!-- Error State -->
+    <div class="error-state" *ngIf="error">
+        <i class="fas fa-exclamation-circle"></i>
+        <p>{{error}}</p>
+        <button (click)="loadOrders()" class="retry-btn">Try Again</button>
+    </div>
+
+    <!-- Empty State -->
+    <div class="empty-state" *ngIf="!loading && !error && orders.length === 0">
+        <i class="fas fa-shopping-bag"></i>
+        <h2>No Orders Yet</h2>
+        <p>Looks like you haven't placed any orders yet.</p>
+        <a routerLink="/shop" class="shop-now-btn">Start Shopping</a>
+    </div>
+
+    <!-- Orders List -->
+    <div class="orders-list" *ngIf="!loading && !error && orders.length > 0">
+        <div class="order-card" *ngFor="let order of orders">
+            <div class="order-header">
+                <div class="order-info">
+                    <h3>Order #{{order.id}}</h3>
+                    <p class="order-date">{{formatDate(order.date)}}</p>
+                </div>
+                <div class="order-status" [ngClass]="getStatusClass(order.status)">
+                    {{order.status | titlecase}}
+                </div>
+            </div>
+
+            <div class="order-items">
+                <div class="item" *ngFor="let item of order.items">
+                    <img [src]="item.image" [alt]="item.name" onerror="this.src='assets/img/products/f1.jpg'">
+                    <div class="item-details">
+                        <h4>{{item.name}}</h4>
+                        <p class="quantity">Quantity: {{item.quantity}}</p>
+                        <p class="price">{{formatPrice(item.price)}}</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="order-details">
+                <div class="shipping-info">
+                    <h4>Shipping Address</h4>
+                    <p>{{order.shippingAddress.street}}</p>
+                    <p>{{order.shippingAddress.city}}, {{order.shippingAddress.state}}</p>
+                    <p>{{order.shippingAddress.zipCode}}</p>
+                </div>
+                <div class="payment-info">
+                    <h4>Payment Method</h4>
+                    <p>{{order.paymentMethod}}</p>
+                </div>
+            </div>
+
+            <div class="order-footer">
+                <div class="total">
+                    <span>Total:</span>
+                    <span class="amount">{{formatPrice(order.total)}}</span>
+                </div>
+                <div class="order-actions">
+                    <button class="track-btn" [routerLink]="['/orders', order.id]">
+                        Track Order
+                    </button>
+                    <button class="pay-now-btn" (click)="payForOrder(order)" *ngIf="order.status === 'pending'">
+                        Pay Now
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 

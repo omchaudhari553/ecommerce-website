@@ -1,0 +1,108 @@
+<div class="order-list">
+  <div class="header">
+    <h2>Orders</h2>
+  </div>
+
+  <div class="filters">
+    <div class="search-box">
+      <input 
+        type="text" 
+        [(ngModel)]="searchQuery" 
+        (input)="onSearch()"
+        placeholder="Search by order ID or customer name...">
+      <i class="fas fa-search"></i>
+    </div>
+
+    <div class="status-filter">
+      <select [(ngModel)]="selectedStatus" (change)="onStatusChange()">
+        <option value="">All Statuses</option>
+        <option *ngFor="let status of orderStatuses" [value]="status">
+          {{status}}
+        </option>
+      </select>
+    </div>
+
+    <div class="date-filter">
+      <select [(ngModel)]="selectedDateRange" (change)="onDateRangeChange()">
+        <option *ngFor="let range of dateRanges" [value]="range.value">
+          {{range.label}}
+        </option>
+      </select>
+    </div>
+
+    <div class="custom-date-range" *ngIf="selectedDateRange === 'custom'">
+      <input 
+        type="date" 
+        [(ngModel)]="startDate" 
+        (change)="onDateRangeChange()"
+        placeholder="Start Date">
+      <input 
+        type="date" 
+        [(ngModel)]="endDate" 
+        (change)="onDateRangeChange()"
+        placeholder="End Date">
+    </div>
+  </div>
+
+  <div class="alert alert-danger" *ngIf="error">{{ error }}</div>
+
+  <div class="loading" *ngIf="loading">
+    <i class="fas fa-spinner fa-spin"></i> Loading orders...
+  </div>
+
+  <div class="orders-table" *ngIf="!loading">
+    <table>
+      <thead>
+        <tr>
+          <th>Order ID</th>
+          <th>Customer</th>
+          <th>Date</th>
+          <th>Items</th>
+          <th>Total</th>
+          <th>Status</th>
+          <th>Payment</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let order of filteredOrders">
+          <td>#{{ order.id }}</td>
+          <td>{{ order.userName }}</td>
+          <td>{{ formatDate(order.orderDate) }}</td>
+          <td>{{ order.orderItems.length }} items</td>
+          <td>{{ formatCurrency(order.totalAmount) }}</td>
+          <td>
+            <span class="status-badge" [class]="getStatusClass(order.status)">
+              {{ order.status }}
+            </span>
+          </td>
+          <td>
+            <span class="payment-status" [class.paid]="order.paymentStatus === 'PAID'">
+              {{ order.paymentStatus }}
+            </span>
+          </td>
+          <td class="actions">
+            <button [matMenuTriggerFor]="statusMenu" class="status-button">
+              <i class="fas fa-ellipsis-v"></i>
+            </button>
+            <mat-menu #statusMenu="matMenu">
+              <button mat-menu-item *ngFor="let status of orderStatuses"
+                      [disabled]="order.status === status"
+                      (click)="updateOrderStatus(order, status)">
+                {{ status }}
+              </button>
+            </mat-menu>
+            <a [routerLink]="[order.id]" class="view-button">
+              <i class="fas fa-eye"></i>
+            </a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="no-orders" *ngIf="filteredOrders.length === 0">
+      <i class="fas fa-box-open"></i>
+      <p>No orders found</p>
+    </div>
+  </div>
+</div>

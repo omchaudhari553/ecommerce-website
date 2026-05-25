@@ -1,0 +1,106 @@
+<div class="add-product">
+  <header>
+    <h2>Add New Product</h2>
+  </header>
+
+  <form #productForm="ngForm" (ngSubmit)="onSubmit()" class="product-form">
+    <div class="form-group">
+      <label for="name">Product Name</label>
+      <input
+        type="text"
+        id="name"
+        name="name"
+        [(ngModel)]="product.name"
+        required
+        #name="ngModel"
+        class="form-control">
+      <div *ngIf="name.invalid && (name.dirty || name.touched)" class="error-message">
+        Product name is required
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="price">Price</label>
+      <input
+        type="number"
+        id="price"
+        name="price"
+        [(ngModel)]="product.price"
+        required
+        min="0"
+        #price="ngModel"
+        class="form-control">
+      <div *ngIf="price.invalid && (price.dirty || price.touched)" class="error-message">
+        Valid price is required
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="stock">Stock</label>
+      <input
+        type="number"
+        id="stock"
+        name="stock"
+        [(ngModel)]="product.stock"
+        required
+        min="0"
+        #stock="ngModel"
+        class="form-control">
+      <div *ngIf="stock.invalid && (stock.dirty || stock.touched)" class="error-message">
+        Valid stock quantity is required
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="category">Category</label>
+      <select
+        id="category"
+        name="category"
+        [(ngModel)]="product.category"
+        required
+        #category="ngModel"
+        class="form-control">
+        <option value="">Select a category</option>
+        <option *ngFor="let cat of categories" [value]="cat">{{cat}}</option>
+      </select>
+      <div *ngIf="category.invalid && (category.dirty || category.touched)" class="error-message">
+        Category is required
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="description">Description</label>
+      <textarea
+        id="description"
+        name="description"
+        [(ngModel)]="product.description"
+        required
+        #description="ngModel"
+        class="form-control"
+        rows="4"></textarea>
+      <div *ngIf="description.invalid && (description.dirty || description.touched)" class="error-message">
+        Description is required
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="imageUrl">Image URL</label>
+      <input
+        type="url"
+        id="imageUrl"
+        name="imageUrl"
+        [(ngModel)]="product.imageUrl"
+        required
+        #imageUrl="ngModel"
+        class="form-control">
+      <div *ngIf="imageUrl.invalid && (imageUrl.dirty || imageUrl.touched)" class="error-message">
+        Valid image URL is required
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button type="button" (click)="onCancel()" class="btn btn-secondary">Cancel</button>
+      <button type="submit" [disabled]="!productForm.form.valid" class="btn btn-primary">Add Product</button>
+    </div>
+  </form>
+</div> 

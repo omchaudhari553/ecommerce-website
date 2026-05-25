@@ -1,0 +1,86 @@
+<div class="manage-users">
+    <div class="header">
+        <h2>Manage Users</h2>
+        <div class="actions">
+            <div class="search-box">
+                <input 
+                    type="text" 
+                    [(ngModel)]="searchTerm"
+                    (ngModelChange)="filterUsers()"
+                    placeholder="Search users..."
+                >
+                <i class="fas fa-search"></i>
+            </div>
+            <button class="add-user-btn" (click)="openAddUserModal()">
+                <i class="fas fa-plus"></i>
+                Add User
+            </button>
+        </div>
+    </div>
+
+    <div class="users-container">
+        <div class="users-grid">
+            <div class="user-card" *ngFor="let user of getPaginatedUsers()">
+                <div class="user-header">
+                    <div class="avatar">
+                        {{user.name.charAt(0)}}
+                    </div>
+                    <div class="user-info">
+                        <h3>{{user.name}}</h3>
+                        <div class="email">{{user.email}}</div>
+                    </div>
+                    <span class="role-badge" [class]="user.role.toLowerCase()">
+                        {{user.role}}
+                    </span>
+                </div>
+
+                <div class="user-details">
+                    <div class="detail-item">
+                        <div class="label">Joined Date</div>
+                        <div class="value">{{user.joinDate | date}}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="label">Status</div>
+                        <div class="value">{{user.status}}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="label">Orders</div>
+                        <div class="value">{{user.orders}}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="label">Last Login</div>
+                        <div class="value">{{user.lastLogin | date:'short'}}</div>
+                    </div>
+                </div>
+
+                <div class="actions">
+                    <button title="Edit User" (click)="editUser(user)">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button title="View Details" (click)="viewUserDetails(user)">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                    <button class="delete-btn" title="Delete User" (click)="deleteUser(user)">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="pagination" *ngIf="totalPages > 1">
+        <button [disabled]="currentPage === 1" (click)="changePage(currentPage - 1)">
+            <i class="fas fa-chevron-left"></i>
+        </button>
+        <button 
+            *ngFor="let page of getPageNumbers()" 
+            [class.active]="currentPage === page"
+            (click)="changePage(page)"
+        >
+            {{page}}
+        </button>
+        <button [disabled]="currentPage === totalPages" (click)="changePage(currentPage + 1)">
+            <i class="fas fa-chevron-right"></i>
+        </button>
+    </div>
+</div> 

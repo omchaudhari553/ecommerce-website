@@ -1,0 +1,80 @@
+<section id="page-header" class="contact-header">
+    <h2>#let's_talk</h2>
+    <p>LEAVE A MESSAGE, We love to hear from you!</p>
+</section>
+
+<section id="contact-details" class="section-p1">
+    <div class="details">
+        <span>GET IN TOUCH</span>
+        <h2>Visit one of our agency locations or contact us today</h2>
+        <h3>Head Office</h3>
+        <div>
+            <li>
+                <i class="fal fa-map"></i>
+                <p>At Akurdi, Pune, Maharashtra</p>
+            </li>
+            <li>
+                <i class="far fa-envelope"></i>
+                <p>omchaudhari553&#64;gmail.com</p>
+            </li>
+            <li>
+                <i class="fas fa-phone-alt"></i>
+                <p>+91 8830539869</p>
+            </li>
+            <li>
+                <i class="far fa-clock"></i>
+                <p>Monday to Saturday: 9.00am to 6.00pm</p>
+            </li>
+        </div>
+    </div>
+
+    <div class="map">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3784.0448429473!2d73.75725571482638!3d18.646896187394915!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bc2b9e5e5e5e5e5%3A0x5e5e5e5e5e5e5e5e!2sAkurdi%2C%20Pune%2C%20Maharashtra!5e0!3m2!1sen!2sin!4v1637309850935"
+            width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+    </div>
+</section>
+
+<section id="form-details">
+    <form [formGroup]="contactForm" (ngSubmit)="onSubmit()">
+        <span>LEAVE A MESSAGE</span>
+        <h2>We love to hear from you</h2>
+        <input type="text" formControlName="name" placeholder="Your Name">
+        <div *ngIf="contactForm.get('name')?.invalid && contactForm.get('name')?.touched" class="error-message">
+            <small *ngIf="contactForm.get('name')?.errors?.['required']">Name is required</small>
+            <small *ngIf="contactForm.get('name')?.errors?.['minlength']">Name must be at least 2 characters</small>
+        </div>
+        
+        <input type="email" formControlName="email" placeholder="E-mail">
+        <div *ngIf="contactForm.get('email')?.invalid && contactForm.get('email')?.touched" class="error-message">
+            <small *ngIf="contactForm.get('email')?.errors?.['required']">Email is required</small>
+            <small *ngIf="contactForm.get('email')?.errors?.['email']">Please enter a valid email</small>
+        </div>
+        
+        <input type="text" formControlName="subject" placeholder="Subject">
+        <div *ngIf="contactForm.get('subject')?.invalid && contactForm.get('subject')?.touched" class="error-message">
+            <small *ngIf="contactForm.get('subject')?.errors?.['required']">Subject is required</small>
+        </div>
+        
+        <textarea formControlName="message" cols="30" rows="10" placeholder="Your Message"></textarea>
+        <div *ngIf="contactForm.get('message')?.invalid && contactForm.get('message')?.touched" class="error-message">
+            <small *ngIf="contactForm.get('message')?.errors?.['required']">Message is required</small>
+            <small *ngIf="contactForm.get('message')?.errors?.['minlength']">Message must be at least 10 characters</small>
+        </div>
+        
+        <button [disabled]="contactForm.invalid || isSubmitting" class="normal">
+            <span *ngIf="!isSubmitting">Send Message</span>
+            <span *ngIf="isSubmitting">Sending...</span>
+        </button>
+    </form>
+</section>
+
+<section id="newsletter" class="section-p1 section-m1">
+    <div class="newstext">
+        <h4>Sign Up For Newsletters</h4>
+        <p>Get E-mail updates about our latest shop and <span>special offers.</span></p>
+    </div>
+    <div class="form">
+        <input type="text" placeholder="Your email address">
+        <button class="normal">Sign Up</button>
+    </div>
+</section>

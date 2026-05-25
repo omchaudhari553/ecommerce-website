@@ -1,0 +1,133 @@
+<div class="admin-container">
+  <nav class="sidebar">
+    <div class="logo-details">
+      <i class="fas fa-store"></i>
+      <span class="logo_name">Admin Panel</span>
+    </div>
+    <ul class="nav-links">
+      <li [class.active]="activeSection === 'dashboard'" (click)="setActiveSection('dashboard')">
+        <a routerLink="./dashboard">
+          <i class="fas fa-home"></i>
+          <span class="link_name">Dashboard</span>
+        </a>
+      </li>
+      <li [class.active]="activeSection === 'products'" (click)="setActiveSection('products')">
+        <a routerLink="./products">
+          <i class="fas fa-box"></i>
+          <span class="link_name">Products</span>
+        </a>
+      </li>
+      <li [class.active]="activeSection === 'orders'" (click)="setActiveSection('orders')">
+        <a routerLink="./orders">
+          <i class="fas fa-shopping-cart"></i>
+          <span class="link_name">Orders</span>
+        </a>
+      </li>
+      <li [class.active]="activeSection === 'users'" (click)="setActiveSection('users')">
+        <a routerLink="./users">
+          <i class="fas fa-users"></i>
+          <span class="link_name">Users</span>
+        </a>
+      </li>
+      <li [class.active]="activeSection === 'settings'" (click)="setActiveSection('settings')">
+        <a routerLink="./settings">
+          <i class="fas fa-cog"></i>
+          <span class="link_name">Settings</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+  <section class="home-section">
+    <div class="home-content">
+      <div class="overview-boxes">
+        <div class="box">
+          <div class="right-side">
+            <div class="box-topic">Total Orders</div>
+            <div class="number">40,876</div>
+            <div class="indicator">
+              <i class="fas fa-arrow-up"></i>
+              <span class="text">Up from yesterday</span>
+            </div>
+          </div>
+          <i class="fas fa-shopping-cart cart"></i>
+        </div>
+        <div class="box">
+          <div class="right-side">
+            <div class="box-topic">Total Sales</div>
+            <div class="number">₹38,876</div>
+            <div class="indicator">
+              <i class="fas fa-arrow-up"></i>
+              <span class="text">Up from yesterday</span>
+            </div>
+          </div>
+          <i class="fas fa-chart-line cart two"></i>
+        </div>
+        <div class="box">
+          <div class="right-side">
+            <div class="box-topic">Total Products</div>
+            <div class="number">₹12,876</div>
+            <div class="indicator">
+              <i class="fas fa-arrow-up"></i>
+              <span class="text">Up from yesterday</span>
+            </div>
+          </div>
+          <i class="fas fa-box cart three"></i>
+        </div>
+        <div class="box">
+          <div class="right-side">
+            <div class="box-topic">Total Users</div>
+            <div class="number">11,086</div>
+            <div class="indicator">
+              <i class="fas fa-arrow-up"></i>
+              <span class="text">Up from yesterday</span>
+            </div>
+          </div>
+          <i class="fas fa-users cart four"></i>
+        </div>
+      </div>
+
+      <div class="sales-boxes">
+        <div class="recent-sales box">
+          <div class="title">Recent Sales</div>
+          <div class="sales-details">
+            <table>
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Customer</th>
+                  <th>Sales</th>
+                  <th>Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>2024-01-21</td>
+                  <td>John Doe</td>
+                  <td>Delivered</td>
+                  <td>₹204.98</td>
+                </tr>
+                <!-- Add more rows as needed -->
+              </tbody>
+            </table>
+          </div>
+          <div class="button">
+            <a href="#">See All</a>
+          </div>
+        </div>
+        <div class="top-sales box">
+          <div class="title">Top Selling Products</div>
+          <ul class="top-sales-details">
+            <li>
+              <a href="#">
+                <img src="assets/img/products/f1.jpg" alt="">
+                <span class="product">Nike Sport Shoe</span>
+              </a>
+              <span class="price">₹1107</span>
+            </li>
+            <!-- Add more items as needed -->
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

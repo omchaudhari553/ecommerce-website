@@ -1,0 +1,156 @@
+footer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  background: #fff;
+  padding: 60px 80px;
+  margin-top: 40px;
+
+  .col {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 20px;
+
+    .logo {
+      margin-bottom: 30px;
+      height: 40px;
+    }
+
+    h4 {
+      font-size: 14px;
+      padding-bottom: 20px;
+      font-weight: 600;
+    }
+
+    p {
+      font-size: 13px;
+      margin: 0 0 8px 0;
+      color: #465b52;
+    }
+
+    a {
+      font-size: 13px;
+      text-decoration: none;
+      color: #222;
+      margin-bottom: 10px;
+      transition: all 0.3s ease;
+
+      &:hover {
+        color: #088178;
+        padding-left: 5px;
+      }
+    }
+  }
+
+  .follow {
+    margin-top: 20px;
+
+    h4 {
+      margin-bottom: 10px;
+    }
+
+    .icon {
+      display: flex;
+      gap: 8px;
+
+      i {
+        color: #465b52;
+        font-size: 16px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+
+        &:hover {
+          color: #088178;
+          transform: translateY(-2px);
+        }
+      }
+    }
+  }
+
+  .install {
+    .row {
+      display: flex;
+      gap: 10px;
+      margin: 10px 0;
+
+      img {
+        border: 1px solid #088178;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+
+        &:hover {
+          transform: scale(1.05);
+          box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+        }
+      }
+    }
+
+    p {
+      margin: 15px 0;
+    }
+
+    img:last-child {
+      max-width: 220px;
+    }
+  }
+
+  .copyright {
+    width: 100%;
+    text-align: center;
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #e1e1e1;
+
+    p {
+      font-size: 14px;
+      color: #222;
+    }
+  }
+}
+
+@media (max-width: 799px) {
+  footer {
+    padding: 40px 40px;
+
+    .col {
+      margin-bottom: 30px;
+      min-width: 250px;
+    }
+
+    .install {
+      .row {
+        img {
+          width: 140px;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 477px) {
+  footer {
+    padding: 20px;
+    justify-content: flex-start;
+
+    .col {
+      margin-bottom: 25px;
+      width: 100%;
+    }
+
+    .copyright {
+      text-align: start;
+    }
+
+    .install {
+      .row {
+        flex-direction: column;
+        
+        img {
+          width: 180px;
+        }
+      }
+    }
+  }
+}

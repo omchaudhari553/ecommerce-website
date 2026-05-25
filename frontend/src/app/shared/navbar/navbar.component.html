@@ -1,0 +1,62 @@
+<!-- Admin Navigation -->
+<nav class="navbar" *ngIf="isAdmin">
+    <div class="nav-brand">
+        <a routerLink="/admin/dashboard"><img src="assets/img/logo.png" class="logo" alt="logo"></a>
+    </div>
+
+    <div class="nav-links" [class.active]="isNavActive">
+        <ul>
+            <li><a routerLink="/admin/dashboard" routerLinkActive="active">Dashboard</a></li>
+            <li><a routerLink="/admin/manage-products" routerLinkActive="active">Manage Products</a></li>
+            <li><a routerLink="/admin/manage-orders" routerLinkActive="active">Manage Orders</a></li>
+            <li><a routerLink="/admin/users" routerLinkActive="active">Users</a></li>
+            <li>
+                <a href="javascript:void(0)" (click)="logout($event)" class="auth-link logout-link">Logout</a>
+            </li>
+        </ul>
+        <a href="javascript:void(0)" class="close-nav" (click)="closeNav($event)"><i class="far fa-times"></i></a>
+    </div>
+
+    <div class="mobile-nav">
+        <i class="fas fa-bars menu-icon" (click)="toggleNav()"></i>
+    </div>
+</nav>
+
+<!-- User Navigation -->
+<nav class="navbar" *ngIf="!isAdmin">
+    <div class="nav-brand">
+        <a routerLink="/"><img src="assets/img/logo.png" class="logo" alt="logo"></a>
+    </div>
+
+    <div class="nav-links" [class.active]="isNavActive">
+        <ul>
+            <li><a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Home</a></li>
+            <li><a routerLink="/shop" routerLinkActive="active">Shop</a></li>
+            <li><a routerLink="/blog" routerLinkActive="active">Blog</a></li>
+            <li><a routerLink="/about" routerLinkActive="active">About</a></li>
+            <li><a routerLink="/contact" routerLinkActive="active">Contact</a></li>
+            <li *ngIf="isLoggedIn"><a routerLink="/orders" routerLinkActive="active">My Orders</a></li>
+            <li>
+                <a routerLink="/cart" routerLinkActive="active" class="cart-icon">
+                    <i class="far fa-shopping-bag"></i>
+                    <span *ngIf="cartItemCount > 0" class="cart-count">{{cartItemCount}}</span>
+                </a>
+            </li>
+            <li *ngIf="!isLoggedIn">
+                <a routerLink="/auth/login" routerLinkActive="active" class="auth-link login-link">Login</a>
+            </li>
+            <li *ngIf="isLoggedIn">
+                <a href="javascript:void(0)" (click)="logout($event)" class="auth-link logout-link">Logout</a>
+            </li>
+        </ul>
+        <a href="javascript:void(0)" class="close-nav" (click)="closeNav($event)"><i class="far fa-times"></i></a>
+    </div>
+
+    <div class="mobile-nav">
+        <a routerLink="/cart" class="cart-icon">
+            <i class="far fa-shopping-bag"></i>
+            <span *ngIf="cartItemCount > 0" class="cart-count">{{cartItemCount}}</span>
+        </a>
+        <i class="fas fa-bars menu-icon" (click)="toggleNav()"></i>
+    </div>
+</nav>

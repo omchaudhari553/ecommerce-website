@@ -1,0 +1,278 @@
+// Animation Keyframes
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.add-product {
+    padding: 2rem;
+    max-width: 800px;
+    margin: 60px auto;
+    animation: slideInUp 0.6s ease-out;
+
+    .header {
+        margin-bottom: 2rem;
+        text-align: center;
+        animation: fadeIn 0.8s ease-out;
+
+        h2 {
+            font-size: clamp(1.8rem, 4vw, 2.2rem);
+            color: #2d3436;
+            font-weight: 700;
+            position: relative;
+            display: inline-block;
+            margin-bottom: 0.5rem;
+
+            &::after {
+                content: '';
+                position: absolute;
+                bottom: -8px;
+                left: 0;
+                width: 60%;
+                height: 4px;
+                background: linear-gradient(90deg, #6c5ce7, transparent);
+                border-radius: 2px;
+                transition: width 0.3s ease;
+            }
+
+            &:hover::after {
+                width: 100%;
+            }
+        }
+    }
+
+    .product-form {
+        background: rgba(255, 255, 255, 0.9);
+        backdrop-filter: blur(10px);
+        padding: 2rem;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        animation: fadeIn 1s ease-out;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+        &:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+            position: relative;
+
+            label {
+                display: block;
+                margin-bottom: 0.5rem;
+                color: #2d3436;
+                font-weight: 600;
+                font-size: 1rem;
+                transition: color 0.3s ease;
+            }
+
+            input, 
+            select, 
+            textarea {
+                width: 100%;
+                padding: 0.8rem 1rem;
+                border: 2px solid #e9ecef;
+                border-radius: 12px;
+                font-size: 1rem;
+                background: rgba(255, 255, 255, 0.9);
+                transition: all 0.3s ease;
+
+                &:focus {
+                    outline: none;
+                    border-color: #6c5ce7;
+                    box-shadow: 0 0 0 4px rgba(108, 92, 231, 0.1);
+                    transform: translateY(-2px);
+                }
+
+                &:hover {
+                    border-color: #6c5ce7;
+                }
+            }
+
+            textarea {
+                min-height: 120px;
+                resize: vertical;
+            }
+
+            select {
+                appearance: none;
+                background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236c5ce7' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+                background-repeat: no-repeat;
+                background-position: right 1rem center;
+                background-size: 1em;
+            }
+
+            .error-message {
+                color: #ff6b6b;
+                font-size: 0.85rem;
+                margin-top: 0.5rem;
+                display: flex;
+                align-items: center;
+                gap: 0.3rem;
+                opacity: 0;
+                transform: translateY(-10px);
+                animation: slideInUp 0.3s ease-out forwards;
+
+                i {
+                    font-size: 1rem;
+                }
+            }
+
+            &.has-error {
+                input, 
+                select, 
+                textarea {
+                    border-color: #ff6b6b;
+                    &:focus {
+                        box-shadow: 0 0 0 4px rgba(255, 107, 107, 0.1);
+                    }
+                }
+
+                label {
+                    color: #ff6b6b;
+                }
+            }
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 2px solid #e9ecef;
+
+            button {
+                flex: 1;
+                padding: 0.8rem 1.5rem;
+                border: none;
+                border-radius: 12px;
+                font-size: 1rem;
+                font-weight: 600;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 0.5rem;
+                position: relative;
+                overflow: hidden;
+
+                &::before {
+                    content: '';
+                    position: absolute;
+                    top: 0;
+                    left: -100%;
+                    width: 100%;
+                    height: 100%;
+                    background: linear-gradient(
+                        120deg,
+                        transparent,
+                        rgba(255, 255, 255, 0.3),
+                        transparent
+                    );
+                    transition: 0.5s;
+                }
+
+                &:hover::before {
+                    left: 100%;
+                }
+
+                &.add-btn {
+                    background: linear-gradient(135deg, #6c5ce7 0%, #a363d9 100%);
+                    color: white;
+                    box-shadow: 0 4px 15px rgba(108, 92, 231, 0.2);
+
+                    &:hover {
+                        transform: translateY(-3px);
+                        box-shadow: 0 8px 25px rgba(108, 92, 231, 0.3);
+                    }
+
+                    &:active {
+                        transform: translateY(1px);
+                    }
+
+                    &:disabled {
+                        background: #a5a5a5;
+                        cursor: not-allowed;
+                        transform: none;
+                        box-shadow: none;
+                    }
+                }
+
+                &.cancel-btn {
+                    background: #f8f9fa;
+                    color: #2d3436;
+
+                    &:hover {
+                        background: #e9ecef;
+                        transform: translateY(-3px);
+                    }
+
+                    &:active {
+                        transform: translateY(1px);
+                    }
+                }
+
+                i {
+                    font-size: 1.2rem;
+                    transition: transform 0.3s ease;
+                }
+
+                &:hover i {
+                    transform: rotate(15deg);
+                }
+            }
+        }
+    }
+}
+
+// Responsive Design
+@media (max-width: 768px) {
+    .add-product {
+        padding: 1.5rem;
+        margin: 20px auto;
+
+        .product-form {
+            padding: 1.5rem;
+
+            .form-actions {
+                flex-direction: column;
+
+                button {
+                    width: 100%;
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: 480px) {
+    .add-product {
+        padding: 1rem;
+
+        .header h2 {
+            font-size: 1.5rem;
+        }
+
+        .product-form {
+            padding: 1rem;
+        }
+    }
+} 

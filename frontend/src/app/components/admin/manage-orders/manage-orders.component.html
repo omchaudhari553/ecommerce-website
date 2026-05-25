@@ -1,0 +1,90 @@
+<div class="manage-orders">
+    <div class="header">
+        <h2>Manage Orders</h2>
+        <div class="filters">
+            <div class="search-box">
+                <input 
+                    type="text" 
+                    [(ngModel)]="searchTerm"
+                    (ngModelChange)="filterOrders()"
+                    placeholder="Search orders..."
+                >
+                <i class="fas fa-search"></i>
+            </div>
+
+            <select [(ngModel)]="selectedStatus" (ngModelChange)="filterOrders()">
+                <option value="all">All Status</option>
+                <option *ngFor="let status of statuses" [value]="status">
+                    {{status | titlecase}}
+                </option>
+            </select>
+        </div>
+    </div>
+
+    <div class="orders-container">
+        <div class="orders-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Order ID</th>
+                        <th>Customer</th>
+                        <th>Amount</th>
+                        <th>Date</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let order of getPaginatedOrders()">
+                        <td class="order-id">#{{order.id}}</td>
+                        <td class="customer">
+                            <div class="avatar">
+                                {{order.customer.charAt(0)}}
+                            </div>
+                            {{order.customer}}
+                        </td>
+                        <td>{{formatPrice(order.amount)}}</td>
+                        <td>{{order.date | date}}</td>
+                        <td>
+                            <span class="status-badge" [class]="order.status.toLowerCase()">
+                                {{order.status}}
+                            </span>
+                        </td>
+                        <td class="actions">
+                            <button (click)="updateOrderStatus(order, 'Processing')" title="Process Order">
+                                <i class="fas fa-cog"></i>
+                            </button>
+                            <button (click)="updateOrderStatus(order, 'Delivered')" title="Mark as Delivered">
+                                <i class="fas fa-check"></i>
+                            </button>
+                            <button class="view-btn" title="View Details">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    <tr *ngIf="filteredOrders.length === 0">
+                        <td colspan="6" class="no-orders">
+                            No orders found
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="pagination" *ngIf="filteredOrders.length > 0">
+        <button [disabled]="currentPage === 1" (click)="changePage(currentPage - 1)">
+            <i class="fas fa-chevron-left"></i>
+        </button>
+        <button 
+            *ngFor="let page of getPageNumbers()" 
+            [class.active]="currentPage === page"
+            (click)="changePage(page)"
+        >
+            {{page}}
+        </button>
+        <button [disabled]="currentPage === totalPages" (click)="changePage(currentPage + 1)">
+            <i class="fas fa-chevron-right"></i>
+        </button>
+    </div>
+</div> 

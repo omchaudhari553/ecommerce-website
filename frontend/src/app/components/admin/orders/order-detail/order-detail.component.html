@@ -1,0 +1,116 @@
+<div class="order-detail">
+  <div class="header">
+    <button class="back-button" routerLink="/admin/orders">
+      <i class="fas fa-arrow-left"></i> Back to Orders
+    </button>
+    <h2>Order Details</h2>
+  </div>
+
+  <div class="alert alert-danger" *ngIf="error">{{ error }}</div>
+
+  <div class="loading" *ngIf="loading">
+    <i class="fas fa-spinner fa-spin"></i> Loading order details...
+  </div>
+
+  <div class="order-content" *ngIf="!loading && order">
+    <div class="order-header">
+      <div class="order-info">
+        <div class="info-group">
+          <label>Order ID:</label>
+          <span>#{{ order.id }}</span>
+        </div>
+        <div class="info-group">
+          <label>Order Date:</label>
+          <span>{{ formatDate(order.orderDate) }}</span>
+        </div>
+        <div class="info-group">
+          <label>Status:</label>
+          <span class="status-badge" [class]="getStatusClass(order.status)">
+            {{ order.status }}
+          </span>
+        </div>
+      </div>
+
+      <div class="status-actions">
+        <button class="update-status" [matMenuTriggerFor]="statusMenu">
+          Update Status <i class="fas fa-chevron-down"></i>
+        </button>
+        <mat-menu #statusMenu="matMenu">
+          <button mat-menu-item *ngFor="let status of ['PENDING', 'PROCESSING', 'SHIPPED', 'DELIVERED', 'CANCELLED']"
+                  [disabled]="order.status === status"
+                  (click)="updateOrderStatus(status)">
+            {{ status }}
+          </button>
+        </mat-menu>
+      </div>
+    </div>
+
+    <div class="order-sections">
+      <div class="section customer-details">
+        <h3>Customer Details</h3>
+        <div class="info-group">
+          <label>Name:</label>
+          <span>{{ order.userName }}</span>
+        </div>
+        <div class="info-group">
+          <label>Shipping Address:</label>
+          <span>{{ order.shippingAddress }}</span>
+        </div>
+      </div>
+
+      <div class="section payment-details">
+        <h3>Payment Details</h3>
+        <div class="info-group">
+          <label>Payment Status:</label>
+          <span class="payment-status" [class.paid]="order.paymentStatus === 'PAID'">
+            {{ order.paymentStatus }}
+          </span>
+        </div>
+        <div class="info-group" *ngIf="order.razorpayOrderId">
+          <label>Razorpay Order ID:</label>
+          <span>{{ order.razorpayOrderId }}</span>
+        </div>
+        <div class="info-group" *ngIf="order.razorpayPaymentId">
+          <label>Razorpay Payment ID:</label>
+          <span>{{ order.razorpayPaymentId }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="order-items">
+      <h3>Order Items</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Product</th>
+            <th>Price</th>
+            <th>Quantity</th>
+            <th>Subtotal</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of order.orderItems">
+            <td>{{ item.productName }}</td>
+            <td>{{ formatCurrency(item.price) }}</td>
+            <td>{{ item.quantity }}</td>
+            <td>{{ formatCurrency(item.subtotal) }}</td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <td colspan="3">Total</td>
+            <td>{{ formatCurrency(order.totalAmount) }}</td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  </div>
+
+  <div class="not-found" *ngIf="!loading && !order">
+    <i class="fas fa-exclamation-circle"></i>
+    <p>Order not found</p>
+    <button routerLink="/admin/orders" class="back-link">
+      Return to Orders List
+    </button>
+  </div>
+</div>

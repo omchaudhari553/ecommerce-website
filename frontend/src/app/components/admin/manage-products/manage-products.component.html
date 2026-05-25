@@ -1,0 +1,78 @@
+<div class="manage-products">
+    <div class="header">
+        <h1>Manage Products</h1>
+        <button routerLink="new" class="add-product-btn">
+            <i class="fas fa-plus"></i> Add New Product
+        </button>
+    </div>
+
+    <div class="filters">
+        <div class="search-box">
+            <i class="fas fa-search"></i>
+            <input 
+                type="text" 
+                [(ngModel)]="searchTerm" 
+                (input)="filterProducts()"
+                placeholder="Search products..."
+            >
+        </div>
+
+        <div class="filter-select">
+            <select [(ngModel)]="selectedCategory" (change)="filterProducts()">
+                <option value="all">All Categories</option>
+                <option *ngFor="let category of categories" [value]="category">
+                    {{category | titlecase}}
+                </option>
+            </select>
+        </div>
+    </div>
+
+    <div class="products-grid">
+        <div class="product-card" *ngFor="let product of getPaginatedProducts()">
+            <div class="product-image">
+                <img [src]="product.image" 
+                     [alt]="product.name"
+                     (error)="handleImageError($event)"
+                     loading="lazy">
+                <span class="status-badge" [class]="product.stock > 10 ? 'in-stock' : product.stock > 0 ? 'low-stock' : 'out-of-stock'">
+                    {{product.stock > 10 ? 'In Stock' : product.stock > 0 ? 'Low Stock' : 'Out of Stock'}}
+                </span>
+            </div>
+            <div class="product-info">
+                <h3>{{product.name}}</h3>
+                <p class="price">{{formatPrice(product.price)}}</p>
+                <div class="product-meta">
+                    <span>
+                        <i class="fas fa-box"></i> {{product.stock}} units
+                    </span>
+                    <span>
+                        <i class="fas fa-tag"></i> {{product.category | titlecase}}
+                    </span>
+                </div>
+            </div>
+            <div class="action-buttons">
+                <button class="edit-btn" [routerLink]="['/admin/manage-products/edit', product.id]">
+                    <i class="fas fa-edit"></i> Edit
+                </button>
+                <button class="delete-btn" (click)="deleteProduct(product.id)">
+                    <i class="fas fa-trash"></i> Delete
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="pagination" *ngIf="filteredProducts.length > 0">
+        <button [disabled]="currentPage === 1" (click)="changePage(currentPage - 1)">
+            <i class="fas fa-chevron-left"></i>
+        </button>
+        <button 
+            *ngFor="let page of getPageNumbers()" 
+            [class.active]="currentPage === page"
+            (click)="changePage(page)">
+            {{page}}
+        </button>
+        <button [disabled]="currentPage === totalPages" (click)="changePage(currentPage + 1)">
+            <i class="fas fa-chevron-right"></i>
+        </button>
+    </div>
+</div> 

@@ -1,0 +1,108 @@
+<section id="page-header" class="auth-header">
+    <h2>#login</h2>
+    <p>Sign in to access your account!</p>
+</section>
+
+<section id="form-details" class="section-p1">
+    <div class="login-container">
+        <div class="login-card">
+            <div class="login-type-slider">
+                <div class="slider-container">
+                    <button 
+                        [class.active]="!isAdminLogin" 
+                        (click)="setLoginType(false)"
+                        class="slider-button"
+                    >
+                        User Login
+                    </button>
+                    <button 
+                        [class.active]="isAdminLogin" 
+                        (click)="setLoginType(true)"
+                        class="slider-button"
+                    >
+                        Admin Login
+                    </button>
+                    <div class="slider-background" [class.admin]="isAdminLogin"></div>
+                </div>
+            </div>
+
+            <h2 class="login-title">{{ isAdminLogin ? 'Admin Login' : 'User Login' }}</h2>
+            <form #loginForm="ngForm" (ngSubmit)="onSubmit()">
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <div class="input-group">
+                        <i class="fas fa-envelope"></i>
+                        <input 
+                            type="email" 
+                            id="email" 
+                            name="email"
+                            [(ngModel)]="email"
+                            #emailInput="ngModel"
+                            required
+                            email
+                            placeholder="{{ isAdminLogin ? 'Enter admin email' : 'Enter your email' }}"
+                            [class.is-invalid]="emailInput.invalid && emailInput.touched"
+                        >
+                    </div>
+                    <div class="error-message" *ngIf="emailInput.errors?.['required'] && emailInput.touched">
+                        Email is required
+                    </div>
+                    <div class="error-message" *ngIf="emailInput.errors?.['email'] && emailInput.touched">
+                        Please enter a valid email address
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <div class="input-group">
+                        <i class="fas fa-lock"></i>
+                        <input 
+                            [type]="showPassword ? 'text' : 'password'" 
+                            id="password" 
+                            name="password"
+                            [(ngModel)]="password"
+                            #passwordInput="ngModel"
+                            required
+                            minlength="6"
+                            placeholder="{{ isAdminLogin ? 'Enter admin password' : 'Enter your password' }}"
+                            [class.is-invalid]="passwordInput.invalid && passwordInput.touched"
+                        >
+                        <i class="fas" [class.fa-eye]="!showPassword" [class.fa-eye-slash]="showPassword" (click)="togglePasswordVisibility()"></i>
+                    </div>
+                    <div class="error-message" *ngIf="passwordInput.errors?.['required'] && passwordInput.touched">
+                        Password is required
+                    </div>
+                    <div class="error-message" *ngIf="passwordInput.errors?.['minlength'] && passwordInput.touched">
+                        Password must be at least 6 characters long
+                    </div>
+                </div>
+
+                <div class="form-group remember-me">
+                    <label class="checkbox-container">
+                        <input 
+                            type="checkbox" 
+                            name="rememberMe"
+                            [(ngModel)]="rememberMe"
+                        >
+                        <span class="checkmark"></span>
+                        Remember me
+                    </label>
+                </div>
+
+                <div *ngIf="errorMessage" class="error-message">
+                    {{ errorMessage }}
+                </div>
+
+                <button type="submit" class="login-btn" [disabled]="loginForm.invalid || loading">
+                    <span *ngIf="!loading">{{ isAdminLogin ? 'Admin Login' : 'Login' }}</span>
+                    <i *ngIf="loading" class="fas fa-spinner fa-spin"></i>
+                </button>
+
+                <div class="register-link" *ngIf="!isAdminLogin">
+                    Don't have an account? 
+                    <a routerLink="/auth/register">Register here</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
