@@ -1,4 +1,5 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://your-render-app-url.onrender.com/api'
+  // Set API_URL in Vercel → Environment Variables, or replace with your Railway/Render URL
+  apiUrl: 'https://e-learning-platform-1-wy8g.onrender.com/api'
 };
