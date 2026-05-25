@@ -1,8 +1,8 @@
 {
   "buildCommand": "npm run build",
-  "outputDirectory": "dist/ecommerce-angular",
+  "outputDirectory": "dist/ecommerce-angular/browser",
   "installCommand": "npm install",
   "rewrites": [
-    { "source": "/(.*)", "destination": "/index.html" }
+    { "source": "/((?!.*\\..*).*)", "destination": "/index.html" }
   ]
 }
