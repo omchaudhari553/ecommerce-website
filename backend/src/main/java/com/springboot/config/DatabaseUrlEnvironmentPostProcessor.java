@@ -26,8 +26,11 @@ public class DatabaseUrlEnvironmentPostProcessor implements EnvironmentPostProce
         String mysqlHost = environment.getProperty("MYSQLHOST");
 
         if (isRailwayInternal(mysqlUrl) || isRailwayInternalHost(mysqlHost)) {
-            mysqlUrl = environment.getProperty("MYSQL_PUBLIC_URL");
-            mysqlHost = null;
+            String publicUrl = environment.getProperty("MYSQL_PUBLIC_URL");
+            if (publicUrl != null && !publicUrl.isBlank()) {
+                mysqlUrl = publicUrl;
+                mysqlHost = null;
+            }
         }
 
         if ((mysqlUrl == null || mysqlUrl.isBlank()) && (mysqlHost == null || mysqlHost.isBlank())) {
@@ -99,8 +102,7 @@ public class DatabaseUrlEnvironmentPostProcessor implements EnvironmentPostProce
     }
 
     private String buildJdbcUrl(String host, String port, String database, String sslEnabled) {
-        String params = "true".equalsIgnoreCase(sslEnabled) ? DEFAULT_PARAMS
-                : "useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true";
+        String params = connectionParams(host, sslEnabled);
         return String.format("jdbc:mysql://%s:%s/%s?%s", host, port, database, params);
     }
 
@@ -108,7 +110,16 @@ public class DatabaseUrlEnvironmentPostProcessor implements EnvironmentPostProce
         if (url.contains("useSSL=") || url.contains("sslMode=")) {
             return url;
         }
-        return url.contains("?") ? url + "&" + DEFAULT_PARAMS : url + "?" + DEFAULT_PARAMS;
+        String params = connectionParams(url, "true");
+        return url.contains("?") ? url + "&" + params : url + "?" + params;
+    }
+
+    private String connectionParams(String hostOrUrl, String sslEnabled) {
+        if (hostOrUrl != null && hostOrUrl.contains("railway.internal")) {
+            return "useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true";
+        }
+        return "true".equalsIgnoreCase(sslEnabled) ? DEFAULT_PARAMS
+                : "useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true";
     }
 
     private static boolean isRailwayInternal(String url) {
