@@ -10,7 +10,6 @@ import java.util.Map;
 
 /**
  * Normalizes Railway / cloud MySQL env vars into a JDBC URL Spring Boot can use.
- * Handles mysql:// (no jdbc prefix), credentials embedded in URL, and SSL params.
  */
 public class DatabaseUrlEnvironmentPostProcessor implements EnvironmentPostProcessor {
 
@@ -19,17 +18,25 @@ public class DatabaseUrlEnvironmentPostProcessor implements EnvironmentPostProce
 
     @Override
     public void postProcessEnvironment(ConfigurableEnvironment environment, SpringApplication application) {
-        // Railway: MYSQL_PUBLIC_URL is reachable from Render; MYSQL_URL / mysql.railway.internal are not
-        String mysqlUrl = firstNonBlank(
-                environment.getProperty("MYSQL_PUBLIC_URL"),
-                environment.getProperty("MYSQL_URL"));
+        boolean onRailway = environment.getProperty("RAILWAY_ENVIRONMENT") != null;
+
+        String mysqlUrl;
         String mysqlHost = environment.getProperty("MYSQLHOST");
 
-        if (isRailwayInternal(mysqlUrl) || isRailwayInternalHost(mysqlHost)) {
-            String publicUrl = environment.getProperty("MYSQL_PUBLIC_URL");
-            if (publicUrl != null && !publicUrl.isBlank()) {
-                mysqlUrl = publicUrl;
-                mysqlHost = null;
+        if (onRailway) {
+            mysqlUrl = firstNonBlank(
+                    environment.getProperty("MYSQL_URL"),
+                    environment.getProperty("MYSQL_PRIVATE_URL"));
+        } else {
+            mysqlUrl = firstNonBlank(
+                    environment.getProperty("MYSQL_PUBLIC_URL"),
+                    environment.getProperty("MYSQL_URL"));
+            if (isRailwayInternal(mysqlUrl) || isRailwayInternalHost(mysqlHost)) {
+                String publicUrl = environment.getProperty("MYSQL_PUBLIC_URL");
+                if (publicUrl != null && !publicUrl.isBlank()) {
+                    mysqlUrl = publicUrl;
+                    mysqlHost = null;
+                }
             }
         }
 
@@ -117,6 +124,9 @@ public class DatabaseUrlEnvironmentPostProcessor implements EnvironmentPostProce
     private String connectionParams(String hostOrUrl, String sslEnabled) {
         if (hostOrUrl != null && hostOrUrl.contains("railway.internal")) {
             return "useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true";
+        }
+        if (hostOrUrl != null && hostOrUrl.contains("proxy.rlwy.net")) {
+            return "useSSL=true&requireSSL=true&serverTimezone=UTC&allowPublicKeyRetrieval=true";
         }
         return "true".equalsIgnoreCase(sslEnabled) ? DEFAULT_PARAMS
                 : "useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true";

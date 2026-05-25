@@ -22,9 +22,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .cors().disable()  // Disable Spring Security CORS - handled by CorsFilter
             .csrf().disable()
             .authorizeRequests()
-            .antMatchers("/**").permitAll()
-            .and()
-            .httpBasic();
+            .antMatchers("/**").permitAll();
     }
     
     @Bean
