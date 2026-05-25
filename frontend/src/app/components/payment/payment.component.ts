@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { CartService } from '../../services/cart.service';
+import { ProductService } from '../../services/product.service';
 import { PaymentService, CreateOrderRequest, Order } from '../../services/payment.service';
 import { CartItem } from '../../models/cart-item.model';
 import { AuthService } from '../../services/auth.service';
@@ -432,6 +433,7 @@ export class PaymentComponent implements OnInit {
 
   constructor(
     private cartService: CartService,
+    private productService: ProductService,
     private paymentService: PaymentService,
     private authService: AuthService,
     private router: Router,
@@ -453,8 +455,41 @@ export class PaymentComponent implements OnInit {
   loadCartItems(): void {
     this.cartService.getCartItems().subscribe({
       next: (items: CartItem[]) => {
-        this.cartItems = items;
-        this.calculateTotal();
+        this.productService.getProducts().subscribe({
+          next: (products) => {
+            const validIds = new Set(products.map(p => p.id));
+            this.cartItems = items
+              .map(item => {
+                const pid = item.productId ?? item.id;
+                let product = products.find(p => p.id === pid);
+                if (!product && item.name) {
+                  product = products.find(p => p.name === item.name);
+                }
+                if (!product) {
+                  return null;
+                }
+                return {
+                  ...item,
+                  id: product.id,
+                  productId: product.id,
+                  name: product.name,
+                  price: product.price,
+                  image: product.image
+                };
+              })
+              .filter((item): item is CartItem => item !== null);
+
+            if (items.length > 0 && this.cartItems.length === 0) {
+              this.errorMessage = 'Your cart has outdated items. Please shop again and add products.';
+              this.cartService.clearCart();
+            }
+            this.calculateTotal();
+          },
+          error: () => {
+            this.cartItems = items;
+            this.calculateTotal();
+          }
+        });
       },
       error: (error: Error) => {
         this.errorMessage = 'Error loading cart items';
@@ -567,10 +602,26 @@ export class PaymentComponent implements OnInit {
     console.log('Cart items:', this.cartItems);
     console.log('Total amount:', this.totalAmount);
 
-    const orderItems = this.cartItems.map(item => ({
-      productId: item.productId || item.id,  // Use productId if available, fallback to id
-      quantity: item.quantity
-    }));
+    if (this.cartItems.length === 0) {
+      this.processing = false;
+      this.errorMessage = 'Your cart is empty. Add products before checkout.';
+      return;
+    }
+
+    let orderItems: { productId: number; quantity: number }[];
+    try {
+      orderItems = this.cartItems.map(item => {
+        const productId = item.productId ?? item.id;
+        if (!productId) {
+          throw new Error('Invalid cart item: missing product id');
+        }
+        return { productId, quantity: item.quantity };
+      });
+    } catch {
+      this.processing = false;
+      this.errorMessage = 'Invalid cart. Please clear your cart and add products again.';
+      return;
+    }
 
     console.log('Creating order with items:', orderItems);
 
@@ -647,8 +698,13 @@ export class PaymentComponent implements OnInit {
         
         // Add delay to ensure processing is stopped
         setTimeout(() => {
+          const appOrderId = this.currentOrder?.id;
+          if (!appOrderId) {
+            this.errorMessage = 'Order reference lost. Please contact support.';
+            return;
+          }
           this.verifyPayment({
-            orderId: order.orderId,
+            orderId: String(appOrderId),
             razorpayPaymentId: response.razorpay_payment_id,
             razorpayOrderId: response.razorpay_order_id,
             razorpaySignature: response.razorpay_signature
