@@ -2,6 +2,7 @@ package com.springboot.config;
 
 import com.razorpay.RazorpayClient;
 import com.razorpay.RazorpayException;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -9,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @Configuration
+@ConditionalOnExpression("!'${razorpay.key.id:}'.trim().isEmpty()")
 public class RazorpayConfig {
 
     private static final Logger logger = LoggerFactory.getLogger(RazorpayConfig.class);

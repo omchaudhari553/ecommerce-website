@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.Mac;
@@ -23,6 +24,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 
 @Service
+@ConditionalOnExpression("!'${razorpay.key.id:}'.trim().isEmpty()")
 public class PaymentService {
     private static final Logger logger = LoggerFactory.getLogger(PaymentService.class);
 
