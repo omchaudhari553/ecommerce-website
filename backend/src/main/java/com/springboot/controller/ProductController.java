@@ -1,5 +1,6 @@
 package com.springboot.controller;
 
+import com.springboot.config.ProductCatalogSeeder;
 import com.springboot.entity.Product;
 import com.springboot.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Map;
 import java.math.BigDecimal;
 
 @RestController
@@ -16,6 +18,9 @@ public class ProductController {
     
     @Autowired
     private ProductService productService;
+
+    @Autowired
+    private ProductCatalogSeeder catalogSeeder;
     
     @GetMapping
     public ResponseEntity<List<Product>> getAllProducts() {
@@ -55,6 +60,11 @@ public class ProductController {
         return ResponseEntity.ok(productService.updateProduct(product));
     }
     
+    @PostMapping("/seed-catalog")
+    public ResponseEntity<Map<String, Object>> seedCatalog() {
+        return ResponseEntity.ok(catalogSeeder.ensureCatalog());
+    }
+
     @PostMapping("/create-product-4")
     public ResponseEntity<Product> createProduct4() {
         Product product = new Product();
