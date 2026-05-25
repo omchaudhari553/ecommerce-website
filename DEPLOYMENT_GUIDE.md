@@ -60,20 +60,25 @@ This guide will help you deploy your e-commerce application on:
    - **Runtime**: Java 17
 
 4. **Add Environment Variables**
-   Add these environment variables in Render:
-   
+   In Railway → your MySQL service → **Variables**, copy `MYSQLHOST`, `MYSQLPORT`, `MYSQLUSER`, `MYSQLPASSWORD`, and `MYSQLDATABASE`.
+
+   In Render → **Environment**, add (do **not** use Render's own database unless you migrated off Railway):
+
    ```
-   MYSQLHOST=your-railway-mysql-host.railway.app
-   MYSQLPORT=3306
-   MYSQLUSER=your_railway_username
-   MYSQLPASSWORD=your_railway_password
-   MYSQLDATABASE=ebdb
-   MYSQL_URL=jdbc:mysql://your-railway-mysql-host.railway.app:3306/ebdb
+   MYSQLHOST=<from Railway, e.g. crossover.proxy.rlwy.net>
+   MYSQLPORT=<from Railway, e.g. 21639>
+   MYSQLUSER=<from Railway>
+   MYSQLPASSWORD=<from Railway>
+   MYSQLDATABASE=<from Railway, e.g. railway>
    RAZORPAY_KEY_ID=your_razorpay_key_id
    RAZORPAY_KEY_SECRET=your_razorpay_key_secret
    OPENAI_API_KEY=your_openai_api_key
    SPRING_PROFILES_ACTIVE=prod
    ```
+
+   Optional: paste Railway's `MYSQL_URL` as-is (`mysql://user:pass@host:port/db`) — the app converts it to JDBC automatically. Prefer separate `MYSQLHOST` / `MYSQLPORT` variables when possible.
+
+   If connection still fails with SSL errors, add `MYSQL_SSL=false` on Render and redeploy.
 
 5. **Deploy**
    - Click "Create Web Service"

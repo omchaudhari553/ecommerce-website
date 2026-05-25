@@ -6,30 +6,17 @@ services:
     dockerContext: ./backend
     dockerfilePath: ./backend/Dockerfile
     envVars:
+      # Set these manually in Render dashboard from Railway MySQL → Variables tab
       - key: MYSQLHOST
-        fromDatabase:
-          name: railway-mysql
-          property: host
+        sync: false
       - key: MYSQLPORT
-        fromDatabase:
-          name: railway-mysql
-          property: port
+        sync: false
       - key: MYSQLUSER
-        fromDatabase:
-          name: railway-mysql
-          property: username
+        sync: false
       - key: MYSQLPASSWORD
-        fromDatabase:
-          name: railway-mysql
-          property: password
+        sync: false
       - key: MYSQLDATABASE
-        fromDatabase:
-          name: railway-mysql
-          property: database
-      - key: MYSQL_URL
-        fromDatabase:
-          name: railway-mysql
-          property: connectionString
+        sync: false
       - key: RAZORPAY_KEY_ID
         sync: false
       - key: RAZORPAY_KEY_SECRET
@@ -38,7 +25,3 @@ services:
         sync: false
       - key: SPRING_PROFILES_ACTIVE
         value: prod
-
-databases:
-  - name: railway-mysql
-    databaseName: ebdb
