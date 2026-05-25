@@ -19,14 +19,19 @@ public class DatabaseUrlEnvironmentPostProcessor implements EnvironmentPostProce
     @Override
     public void postProcessEnvironment(ConfigurableEnvironment environment, SpringApplication application) {
         boolean onRailway = environment.getProperty("RAILWAY_ENVIRONMENT") != null;
-
-        String mysqlUrl;
         String mysqlHost = environment.getProperty("MYSQLHOST");
 
+        if (onRailway && mysqlHost != null && !mysqlHost.isBlank()) {
+            applyFromHostVars(environment, mysqlHost);
+            return;
+        }
+
+        String mysqlUrl;
         if (onRailway) {
             mysqlUrl = firstNonBlank(
                     environment.getProperty("MYSQL_URL"),
-                    environment.getProperty("MYSQL_PRIVATE_URL"));
+                    environment.getProperty("MYSQL_PRIVATE_URL"),
+                    environment.getProperty("MYSQL_PUBLIC_URL"));
         } else {
             mysqlUrl = firstNonBlank(
                     environment.getProperty("MYSQL_PUBLIC_URL"),
@@ -49,15 +54,31 @@ public class DatabaseUrlEnvironmentPostProcessor implements EnvironmentPostProce
         if (mysqlUrl != null && !mysqlUrl.isBlank()) {
             parseMysqlUrl(mysqlUrl.trim(), overrides);
         } else {
-            String port = environment.getProperty("MYSQLPORT", "3306");
-            String database = firstNonBlank(
-                    environment.getProperty("MYSQLDATABASE"),
-                    environment.getProperty("MYSQL_DATABASE"),
-                    "railway");
-            overrides.put("spring.datasource.url",
-                    buildJdbcUrl(mysqlHost, port, database, environment.getProperty("MYSQL_SSL", "true")));
+            applyHostOverrides(overrides, mysqlHost, environment);
         }
 
+        applyCredentials(overrides, environment);
+        environment.getPropertySources().addFirst(new MapPropertySource("cloudDatabaseConfig", overrides));
+    }
+
+    private void applyFromHostVars(ConfigurableEnvironment environment, String mysqlHost) {
+        Map<String, Object> overrides = new HashMap<>();
+        applyHostOverrides(overrides, mysqlHost, environment);
+        applyCredentials(overrides, environment);
+        environment.getPropertySources().addFirst(new MapPropertySource("cloudDatabaseConfig", overrides));
+    }
+
+    private void applyHostOverrides(Map<String, Object> overrides, String mysqlHost, ConfigurableEnvironment environment) {
+        String port = environment.getProperty("MYSQLPORT", "3306");
+        String database = firstNonBlank(
+                environment.getProperty("MYSQLDATABASE"),
+                environment.getProperty("MYSQL_DATABASE"),
+                "railway");
+        overrides.put("spring.datasource.url",
+                buildJdbcUrl(mysqlHost, port, database, environment.getProperty("MYSQL_SSL", "true")));
+    }
+
+    private void applyCredentials(Map<String, Object> overrides, ConfigurableEnvironment environment) {
         if (!overrides.containsKey("spring.datasource.username")) {
             String user = environment.getProperty("MYSQLUSER");
             if (user != null && !user.isBlank()) {
@@ -70,8 +91,6 @@ public class DatabaseUrlEnvironmentPostProcessor implements EnvironmentPostProce
                 overrides.put("spring.datasource.password", password);
             }
         }
-
-        environment.getPropertySources().addFirst(new MapPropertySource("cloudDatabaseConfig", overrides));
     }
 
     private void parseMysqlUrl(String url, Map<String, Object> overrides) {
