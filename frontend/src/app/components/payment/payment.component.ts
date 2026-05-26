@@ -6,6 +6,7 @@ import { CartService } from '../../services/cart.service';
 import { ProductService } from '../../services/product.service';
 import { PaymentService, CreateOrderRequest, Order } from '../../services/payment.service';
 import { CartItem } from '../../models/cart-item.model';
+import { Product } from '../../models/product.model';
 import { AuthService } from '../../services/auth.service';
 
 declare var Razorpay: any;
@@ -452,32 +453,35 @@ export class PaymentComponent implements OnInit {
     });
   }
 
+  private syncCartWithProducts(items: CartItem[], products: Product[]): CartItem[] {
+    const synced: CartItem[] = [];
+    for (const item of items) {
+      const pid = item.productId ?? item.id;
+      let product = products.find(p => p.id === pid);
+      if (!product && item.name) {
+        product = products.find(p => p.name === item.name);
+      }
+      if (!product) {
+        continue;
+      }
+      synced.push({
+        ...item,
+        id: product.id,
+        productId: product.id,
+        name: product.name,
+        price: product.price,
+        image: product.image || item.image || 'f1.jpg'
+      });
+    }
+    return synced;
+  }
+
   loadCartItems(): void {
     this.cartService.getCartItems().subscribe({
       next: (items: CartItem[]) => {
         this.productService.getProducts().subscribe({
           next: (products) => {
-            const validIds = new Set(products.map(p => p.id));
-            this.cartItems = items
-              .map(item => {
-                const pid = item.productId ?? item.id;
-                let product = products.find(p => p.id === pid);
-                if (!product && item.name) {
-                  product = products.find(p => p.name === item.name);
-                }
-                if (!product) {
-                  return null;
-                }
-                return {
-                  ...item,
-                  id: product.id,
-                  productId: product.id,
-                  name: product.name,
-                  price: product.price,
-                  image: product.image
-                };
-              })
-              .filter((item): item is CartItem => item !== null);
+            this.cartItems = this.syncCartWithProducts(items, products);
 
             if (items.length > 0 && this.cartItems.length === 0) {
               this.errorMessage = 'Your cart has outdated items. Please shop again and add products.';
@@ -686,10 +690,33 @@ export class PaymentComponent implements OnInit {
     const options = {
       key: order.key,
       amount: amountInPaise, // Amount in paise
-      currency: order.currency,
-      name: 'Your Store Name',
+      currency: order.currency || 'INR',
+      name: 'Cara',
       description: `Order Total: ₹${amountInRupees}`,
       order_id: order.razorpayOrderId,
+      method: {
+        upi: true,
+        card: true,
+        netbanking: true,
+        wallet: true
+      },
+      config: {
+        display: {
+          blocks: {
+            upi: {
+              name: 'Pay via UPI / UPI ID',
+              instruments: [{ method: 'upi' }]
+            }
+          },
+          sequence: ['block.upi'],
+          preferences: {
+            show_default_blocks: true
+          }
+        }
+      },
+      upi: {
+        flow: 'collect'
+      },
       handler: (response: any) => {
         console.log('Payment success response:', response);
         // Stop processing immediately
